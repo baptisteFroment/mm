@@ -104,3 +104,4 @@ Le TLS agit en initiants des négociations TLS, ou "handshake TLS", lorsqu'un ut
 
 Les performances des applications web ne sont généralement pas affectées par les dernières versions du TLS. Bien que la négociation TLS puisse nécessiter un certain temps de chargement et de la puissance de calcul en raison de sa complexité, des technologies comme le TLS False Start et la TLS Session Resumption ont été développées pour réduire la latence et rendre le protocole plus rapide. En fin de compte, le TLS est devenu un protocole rapide et efficace, et les coûts de calcul associés sont généralement négligeables par rapport aux normes actuelles. La version TLS 1.3, en particulier, a rendu le processus encore plus rapide en réduisant le nombre d'allers-retours nécessaires lors de la négociation.
 
+[code](https://stackoverflow.com/questions/5789193/extracting-public-key-from-certificate-and-encrypting-data)

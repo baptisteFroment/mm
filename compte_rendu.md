@@ -3,6 +3,18 @@ Qu’est-ce que TLS/SSL 🆗
 Quels sont les algos de chiffrements utilisé? ⬅️
 Qu’est ce qu’une suite type ?
 
+
+
+1. Introduction - contexte	1
+2. Etapes pour arriver à un certificat TLS	1
+3. Conclusion - ouverture thème sécurité	1
+Les algos de chiffrement dans le protocole https	2
+resumé de la page wikipedia:	3
+Les suites de chiffrements tls	5
+Fonctionnement TLS	6
+
+Introduction - contexte
+
 liens utiles: https://www.youtube.com/watch?v=WIMKeyJ60Rw
 
 détail TLS 
@@ -103,5 +115,22 @@ Pour utiliser le TLS, un certificat TLS, également appelé certificat SSL en ra
 Le TLS agit en initiants des négociations TLS, ou "handshake TLS", lorsqu'un utilisateur accède à un site web protégé par ce protocole. Au cours de cette négociation, les appareils client et serveur définissent des paramètres tels que la version de TLS, les suites de chiffrement, et ils authentifient le serveur grâce à son certificat TLS. Ensuite, ils génèrent des clés de session pour chiffrer les données de manière sécurisée.
 
 Les performances des applications web ne sont généralement pas affectées par les dernières versions du TLS. Bien que la négociation TLS puisse nécessiter un certain temps de chargement et de la puissance de calcul en raison de sa complexité, des technologies comme le TLS False Start et la TLS Session Resumption ont été développées pour réduire la latence et rendre le protocole plus rapide. En fin de compte, le TLS est devenu un protocole rapide et efficace, et les coûts de calcul associés sont généralement négligeables par rapport aux normes actuelles. La version TLS 1.3, en particulier, a rendu le processus encore plus rapide en réduisant le nombre d'allers-retours nécessaires lors de la négociation.
+
+
+
+Fonctionnement TLS
+
+Le Handshake : 
+Client Hello
+Server Hello
+Certificats envoyé par le serveur
+Echange de clés 
+méthode Diffie-Hellman
+
+
+Avec la clé secrète obtenu par l’échange de clé (asymétrique), plus une suite cryptographique (authentification, chiffrement par bloc, code d’authentification de message (MAC)), on peut échanger de manière sécurisée en chiffrant et déchiffrant les messages envoyés.
+Autre source : hartleybrody
+Conclusion - ouverture thème sécurité
+
 
 [code](https://stackoverflow.com/questions/5789193/extracting-public-key-from-certificate-and-encrypting-data)

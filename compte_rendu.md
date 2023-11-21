@@ -130,6 +130,70 @@ méthode Diffie-Hellman
 
 Avec la clé secrète obtenu par l’échange de clé (asymétrique), plus une suite cryptographique (authentification, chiffrement par bloc, code d’authentification de message (MAC)), on peut échanger de manière sécurisée en chiffrant et déchiffrant les messages envoyés.
 Autre source : hartleybrody
+
+1 - Client Hello 
+
+Qu’est ce que la négociation (handshake ) ?
+
+Le handshake désigne le processus qui amorce une session de communication en utilisant le chiffrement TLS. Durant cette négociation, les deux parties s’échangent des messages d’authentification et de vérification. Elles établissent également les algorithmes de chiffrement qu’elles utiliseront. De plus, les deux parties se mettent d’accord sur les clés de session.
+
+La négociation intervient chaque fois qu’un utilisateur accède à un site web via HTTPS, le navigateur interroge le serveur d’origine du site web.
+Il intervient aussi sur d’autre communication comme les appels api et les requêtes DNS sur HTTPS.
+
+Au cours d’une négociation, le client et le serveur effectuent ensemble les opérations suivantes : 
+
+Préciser la version TLS, décider de la suite de chiffrement, authentifier l’identité du serveur à l’aide de la clé publique et de la signature numérique du certificat.
+
+Enfin, les clés de session afin d’utiliser le chiffrement symétrique une fois la négociation terminée.
+
+
+
+Client Hello :
+
+Le client envoie un message Client Hello avec la version du protocole, le client random et une liste de suites de chiffrement. 
+
+Serveur Hello : 
+
+Le serveur répond avec sont certificat, sa suite de chiffrement sélectionnée et le server random. Le serveur calcule une signature numérique de tous les messages jusqu’à ce point.
+
+Authentification : le client vérifie le certificat SSL du serveur auprès de l'autorité de certification qui l'a émis. Cette opération confirme que le serveur est bien celui qu'il prétend être et que le client interagit avec le véritable propriétaire du domaine.
+
+Secret pré-maître : le client envoie une autre chaîne d'octets aléatoire, le « premaster secret », ou secret pré-maître. Le secret pré-maître est chiffré à l'aide de la clé publique et ne peut être déchiffré par le serveur qu'avec la clé privée. (Le client obtient la clé publique dans le certificat SSL du serveur.)
+
+Utilisation de la clé privée : le serveur déchiffre le secret pré-maître.
+
+Création des clés de session : le client et le serveur génèrent des clés de session à partir du client random, du server random et du secret pré-maître. Ils doivent aboutir aux mêmes résultats.
+
+Client prêt : le client envoie un message « Client Finished » chiffré à l'aide d'une clé de session.
+
+Serveur prêt : le serveur envoie un message « Server Finished » chiffré à l'aide d'une clé de session.
+Chiffrement symétrique sécurisé effectué : la négociation est terminée et la communication se poursuit à l'aide des clés de session.
+
+
+Diffie-Hellman
+
+
+
+Avec la clé secrète obtenu par l’échange de clé (asymétrique), plus une suite cryptographique (authentification, chiffrement par bloc, code d’authentification de message (MAC)), on peut échanger de manière sécurisée en chiffrant et déchiffrant les messages envoyés.
+Autre source : hartleybrody
+
+
+Un peu de maths
+
+prendre une clé même aberrante, donner les étapes de calculs sans pour autant les faire, 
+prouver que le système est le même que ce soit pour un nombre à 4 chiffres ou 20. 
+
+L’indicatrice d’Euler est la fonction ϕ :
+N ∗ → N ∗ définie par : ϕ(n) = card({m ∈ N ∗ | m ≤ n et pgcd(m, n) = 1}).
+Par exemple, on a : ϕ(1) = 1, ϕ(2) = 1, ϕ(10) = 4 et, pour tout p ∈ P, ϕ(p) = p − 1. 
+
+Prenons p = 23 et q = 61, on aura n = 23 × 61 = 1403. 
+Par ailleurs : ϕ(n) = ϕ(pq) = ϕ(p)ϕ(q) = (p − 1)(q − 1) = 22 × 60 = 1320. Il faut maintenant choisir e premier avec ϕ(n) = 1320. 
+Prenons e = 7. Il reste maintenant à calculer d tel que ed ≡ 1 (mod 1320).
+
+Soient a, b ∈ Z non tous deux nuls. Alors, il existe λ, µ ∈ Z tels que : λa + µb = pgcd(a, b). Les coefficients λ et µ peuvent être calculés de manière efficace à l’aide l’algorithme d’Euclide étendu. 
+Donc comme e et ϕ(n) sont premiers entre eux, il existe d, f tels que : de + f ϕ(n) = pgcd(e, ϕ(n)) = 1, soit, modulo ϕ(n), de ≡ 1. d est donc l’inverse de e cherché. Dans notre exemple, on peut prendre d = 943. 
+
 Conclusion - ouverture thème sécurité
 
 

@@ -1,34 +1,20 @@
-Qu’est ce que le https 🆗
-Qu’est-ce que TLS/SSL 🆗
-Quels sont les algos de chiffrements utilisé? ⬅️
-Qu’est ce qu’une suite type ?
-
-
+Sommaire
 
 1. Introduction - contexte	1
-2. Etapes pour arriver à un certificat TLS	1
-3. Conclusion - ouverture thème sécurité	1
-Les algos de chiffrement dans le protocole https	2
-resumé de la page wikipedia:	3
-Les suites de chiffrements tls	5
-Fonctionnement TLS	6
+2. Fonctionnement TLS	1
+resumé de la page wikipedia:	2
+Les suites de chiffrements tls	4
+Le Handshake :	5
+3. Diffie-Hellman	6
+4. Suivi des tram HTTP vs HTTPS	7
+Conclusion - ouverture thème sécurité	7
+Brouillon	7
+Les algos de chiffrement dans le protocole https	7
 
 Introduction - contexte
 
-liens utiles: https://www.youtube.com/watch?v=WIMKeyJ60Rw
 
-détail TLS 
-
-google évolution du trafic chiffré
-
-
-Prendre le fonctionnement https sur un site web pour expliquer concrètement
-
-passe par rsa asymétrique pour créer un canal de communication => créer une certification SSL
-puis échange en AES (symétrique) 
-détaillé les communications que la machine peut avoir avec le serveur
-
-Mettre en place une démo
+Fonctionnement TLS
 
 
 Le protocole Transport Layer Security (TLS), sécurise les communications en utilisant une infrastructure à clé publique asymétrique, qui est une combinaison d’une clé publique et d’une clé privée.
@@ -43,28 +29,7 @@ Le chiffrement
 Authentification
 Intégrités des données
 source : https://www.twaino.com/definition/h/https/
-
-
-
-
-
-Les algos de chiffrement dans le protocole https
-
-
-
- vérifier la source : RSA est un des algorithmes de chiffrement qui peuvent être utilisés par SSL.
-TLS est le successeur de SSL, il corrige les vulnérabilités de SSL.
-
-wiki TLS
-
-
-Résumé page cloudflare
-
-
-
 Le certificat TLS est le successeur de SSL 3.0 depuis 1999 avec l’apparition de TLS 1.0
-
-
 
 resumé de la page wikipedia: 
 La Transport Layer Security (TLS), anciennement connue sous le nom de Secure Sockets Layer (SSL), est un ensemble de protocoles de sécurité utilisés pour sécuriser les communications sur les réseaux informatiques, en particulier sur Internet. Le protocole SSL a été initialement développé par Netscape Communications Corporation pour sécuriser les communications via son navigateur web. Plus tard, l'Internet Engineering Task Force (IETF) a repris le développement du protocole en le renommant TLS. Les termes SSL et TLS sont souvent utilisés de manière interchangeable.
@@ -118,7 +83,7 @@ Les performances des applications web ne sont généralement pas affectées par 
 
 
 
-Fonctionnement TLS
+
 
 Le Handshake : 
 Client Hello
@@ -127,9 +92,6 @@ Certificats envoyé par le serveur
 Echange de clés 
 méthode Diffie-Hellman
 
-
-Avec la clé secrète obtenu par l’échange de clé (asymétrique), plus une suite cryptographique (authentification, chiffrement par bloc, code d’authentification de message (MAC)), on peut échanger de manière sécurisée en chiffrant et déchiffrant les messages envoyés.
-Autre source : hartleybrody
 
 1 - Client Hello 
 
@@ -173,28 +135,52 @@ Chiffrement symétrique sécurisé effectué : la négociation est terminée et 
 Diffie-Hellman
 
 
-
 Avec la clé secrète obtenu par l’échange de clé (asymétrique), plus une suite cryptographique (authentification, chiffrement par bloc, code d’authentification de message (MAC)), on peut échanger de manière sécurisée en chiffrant et déchiffrant les messages envoyés.
 Autre source : hartleybrody
 
+Suivi des tram HTTP vs HTTPS
 
-Un peu de maths
+liens utiles: https://www.youtube.com/watch?v=WIMKeyJ60Rw
 
-prendre une clé même aberrante, donner les étapes de calculs sans pour autant les faire, 
-prouver que le système est le même que ce soit pour un nombre à 4 chiffres ou 20. 
+détail TLS 
 
-L’indicatrice d’Euler est la fonction ϕ :
-N ∗ → N ∗ définie par : ϕ(n) = card({m ∈ N ∗ | m ≤ n et pgcd(m, n) = 1}).
-Par exemple, on a : ϕ(1) = 1, ϕ(2) = 1, ϕ(10) = 4 et, pour tout p ∈ P, ϕ(p) = p − 1. 
+google évolution du trafic chiffré
 
-Prenons p = 23 et q = 61, on aura n = 23 × 61 = 1403. 
-Par ailleurs : ϕ(n) = ϕ(pq) = ϕ(p)ϕ(q) = (p − 1)(q − 1) = 22 × 60 = 1320. Il faut maintenant choisir e premier avec ϕ(n) = 1320. 
-Prenons e = 7. Il reste maintenant à calculer d tel que ed ≡ 1 (mod 1320).
 
-Soient a, b ∈ Z non tous deux nuls. Alors, il existe λ, µ ∈ Z tels que : λa + µb = pgcd(a, b). Les coefficients λ et µ peuvent être calculés de manière efficace à l’aide l’algorithme d’Euclide étendu. 
-Donc comme e et ϕ(n) sont premiers entre eux, il existe d, f tels que : de + f ϕ(n) = pgcd(e, ϕ(n)) = 1, soit, modulo ϕ(n), de ≡ 1. d est donc l’inverse de e cherché. Dans notre exemple, on peut prendre d = 943. 
+Prendre le fonctionnement https sur un site web pour expliquer concrètement
+
+passe par rsa asymétrique pour créer un canal de communication => créer une certification SSL
+puis échange en AES (symétrique) 
+détaillé les communications que la machine peut avoir avec le serveur
+
+Mettre en place une démo
+
+
+
+Comment il calcule sa key ?
+
+
+
+Serveur web tout simple HTTP puis HTTPS
+intercepté le trafic avec wireShark
+reproduire le site : https://tls12.xargs.org/#server-encryption-keys-calculation
 
 Conclusion - ouverture thème sécurité
 
 
-[code](https://stackoverflow.com/questions/5789193/extracting-public-key-from-certificate-and-encrypting-data)
+
+Brouillon
+
+Les algos de chiffrement dans le protocole https
+
+
+
+ vérifier la source : RSA est un des algorithmes de chiffrement qui peuvent être utilisés par SSL.
+TLS est le successeur de SSL, il corrige les vulnérabilités de SSL.
+
+wiki TLS
+
+
+Résumé page cloudflare
+
+

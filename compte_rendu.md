@@ -96,21 +96,25 @@ Client prêt : le client envoie un message « Client Finished » chiffré à l'a
 Serveur prêt : le serveur envoie un message « Server Finished » chiffré à l'aide d'une clé de session.
 Chiffrement symétrique sécurisé effectué : la négociation est terminée et la communication se poursuit à l'aide des clés de session.
 
-
 ## Diffie-Hellman
 
+Afin de mettre en place une communication sécurisée, il faut que les deux parties puissent s’échanger des informations de manière sécurisée. Pour cela, il faut que les deux parties puissent s’échanger une clé secrète. Cependant, il est impossible de s’échanger une clé secrète de manière sécurisée. En effet, si on l’envoie en clair, un attaquant peut l’intercepter. Si on l’envoie chiffrée, il faut une clé pour chiffrer la clé secrète, et cette clé doit être envoyée en clair. Il faut donc trouver un moyen de s’échanger une clé secrète sans l’envoyer en clair ni avoir besoin d’une clé pour la chiffrer. C’est ce que permet l’échange de clé Diffie-Hellman. Il permet à deux parties de s’échanger une clé secrète sans avoir besoin de s’échanger une clé pour la chiffrer. Cet échange de clé se fait en deux étapes : l’échange de clé et la génération de la clé secrète. 
 
-Avec la clé secrète obtenu par l’échange de clé (asymétrique), plus une suite cryptographique (authentification, chiffrement par bloc, code d’authentification de message (MAC)), on peut échanger de manière sécurisée en chiffrant et déchiffrant les messages envoyés.
-Autre source : hartleybrody
+En premier lieu, les deux parties s’échangent des informations publiques. Ces informations sont des nombres premiers et des générateurs. Ces nombres premiers et générateurs sont choisis par les deux parties. Ils sont publics et peuvent être connus de tous. Les deux parties s’échangent également des nombres aléatoires. Ces nombres aléatoires sont privés et ne sont connus que de la partie qui les a générés.
+
+Une fois que les deux parties ont échangé leurs informations publiques et leurs nombres aléatoires, elles peuvent générer une clé secrète. Pour cela, elles utilisent les nombres premiers, les générateurs et les nombres aléatoires. Elles effectuent des calculs sur ces nombres et obtiennent une clé secrète. Cette clé secrète est la même pour les deux parties. Elle est donc connue des deux parties. Cependant, elle n’est pas connue des autres. En effet, les nombres premiers et les générateurs sont publics, mais les nombres aléatoires sont privés. Il est donc impossible de retrouver la clé secrète à partir des nombres premiers et des générateurs.
+
+Maintenant que la clé secrète a été générée et connue des deux parties, ils peuvent s’échanger des messages de manière sécurisée. En effet, ils peuvent s'échanger des informations chiffrées de manière symétrique grâce à cette clé secrète connu d'eux seul et sans que personne n'ait pu l'intercepter.
+
+A noter que pour s'assurer que l'on communique bien avec la bonne personne, il faut que les deux parties s'authentifient. Pour cela, elles utilisent des certificats. Ces certificats sont des fichiers qui contiennent des informations sur la personne qui communique. Ces informations sont signées par une autorité de certification. Cette autorité de certification est une entité de confiance. Elle est connue de tous et est capable de vérifier l'identité de la personne qui communique. Ainsi, si une personne communique avec une autre, elle peut vérifier l'identité de cette personne grâce à son certificat. Pour cela, elle vérifie que le certificat est signé par une autorité de certification de confiance. Si c'est le cas, elle peut vérifier l'identité de la personne qui communique. Si ce n'est pas le cas, elle ne peut pas vérifier l'identité de la personne qui communique.
 
 ## Suivi des tram HTTP vs HTTPS
 
 liens utiles: https://www.youtube.com/watch?v=WIMKeyJ60Rw
 
-détail TLS 
+détail TLS
 
 google évolution du trafic chiffré
-
 
 Prendre le fonctionnement https sur un site web pour expliquer concrètement
 

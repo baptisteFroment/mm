@@ -50,17 +50,12 @@ TLS fonctionne en utilisant un mélange de chiffrement asymétrique, comme le ch
 
 Le TLS agit en initiants des négociations TLS, ou "handshake TLS", lorsqu'un utilisateur accède à un site web protégé par ce protocole. Au cours de cette négociation, les appareils client et serveur définissent des paramètres tels que la version de TLS, les suites de chiffrement, et ils authentifient le serveur grâce à son certificat TLS. Ensuite, ils génèrent des clés de session pour chiffrer les données de manière sécurisée.
 
+Processus du Handshake :
 
-Le Handshake : 
-Client Hello
-Server Hello
-Certificats envoyé par le serveur
-Echange de clés avec la méthode Diffie-Hellman
-
-
-1 - Client Hello 
-
-Qu’est ce que la négociation (handshake ) ?
+ - Client Hello
+ - Server Hello
+ - Certificats envoyé par le serveur
+ - Echange de clés avec la méthode Diffie-Hellman
 
 Le handshake désigne le processus qui amorce une session de communication en utilisant le chiffrement TLS. Durant cette négociation, les deux parties s’échangent des messages d’authentification et de vérification. Elles établissent également les algorithmes de chiffrement qu’elles utiliseront. De plus, les deux parties se mettent d’accord sur les clés de session.
 
@@ -72,16 +67,6 @@ Au cours d’une négociation, le client et le serveur effectuent ensemble les o
 Préciser la version TLS, décider de la suite de chiffrement, authentifier l’identité du serveur à l’aide de la clé publique et de la signature numérique du certificat.
 
 Enfin, les clés de session afin d’utiliser le chiffrement symétrique une fois la négociation terminée.
-
-
-
-Client Hello :
-
-Le client envoie un message Client Hello avec la version du protocole, le client random et une liste de suites de chiffrement. 
-
-Serveur Hello : 
-
-Le serveur répond avec sont certificat, sa suite de chiffrement sélectionnée et le server random. Le serveur calcule une signature numérique de tous les messages jusqu’à ce point.
 
 Authentification : le client vérifie le certificat TSL du serveur auprès de l'autorité de certification qui l'a émis. Cette opération confirme que le serveur est bien celui qu'il prétend être et que le client interagit avec le véritable propriétaire du domaine.
 
@@ -98,11 +83,15 @@ Chiffrement symétrique sécurisé effectué : la négociation est terminée et 
 
 ## Diffie-Hellman
 
-Afin de mettre en place une communication sécurisée, il faut que les deux parties puissent s’échanger des informations de manière sécurisée. Pour cela, il faut que les deux parties puissent s’échanger une clé secrète. Cependant, il est impossible de s’échanger une clé secrète de manière sécurisée. En effet, si on l’envoie en clair, un attaquant peut l’intercepter. Si on l’envoie chiffrée, il faut une clé pour chiffrer la clé secrète, et cette clé doit être envoyée en clair. Il faut donc trouver un moyen de s’échanger une clé secrète sans l’envoyer en clair ni avoir besoin d’une clé pour la chiffrer. C’est ce que permet l’échange de clé Diffie-Hellman. Il permet à deux parties de s’échanger une clé secrète sans avoir besoin de s’échanger une clé pour la chiffrer. Cet échange de clé se fait en deux étapes : l’échange de clé et la génération de la clé secrète. 
+Afin de mettre en place une communication sécurisée, il faut que les deux parties puissent s’échanger des informations de manière sécurisée. Pour cela, il faut que les deux parties puissent s’échanger une clé secrète. Cependant, il est impossible de s’échanger une clé secrète de manière sécurisée. En effet, si on l’envoie en clair, un attaquant peut l’intercepter. Si on l’envoie chiffrée, il faut une clé pour chiffrer la clé secrète, et cette clé doit être envoyée en clair. Il faut donc trouver un moyen de s’échanger une clé secrète sans l’envoyer en clair ni avoir besoin d’une clé pour la chiffrer. C’est ce que permet l’échange de clé Diffie-Hellman. Il permet à deux parties de s’échanger une clé secrète sans avoir besoin de s’échanger une clé pour la chiffrer. Cet échange de clé se fait en deux étapes : l’échange de clé et la génération de la clé secrète.
 
-En premier lieu, les deux parties s’échangent des informations publiques. Ces informations sont des nombres premiers et des générateurs. Ces nombres premiers et générateurs sont choisis par les deux parties. Ils sont publics et peuvent être connus de tous. Les deux parties s’échangent également des nombres aléatoires. Ces nombres aléatoires sont privés et ne sont connus que de la partie qui les a générés.
+En premier lieu, les deux parties s’échangent des informations publiques. Ces informations sont des nombres premiers et des générateurs. Ces nombres premiers et générateurs sont choisis par les deux parties. Ils sont publics et peuvent être connus de tous. Les deux parties s’échangent également des nombres aléatoires.
 
 Une fois que les deux parties ont échangé leurs informations publiques et leurs nombres aléatoires, elles peuvent générer une clé secrète. Pour cela, elles utilisent les nombres premiers, les générateurs et les nombres aléatoires. Elles effectuent des calculs sur ces nombres et obtiennent une clé secrète. Cette clé secrète est la même pour les deux parties. Elle est donc connue des deux parties. Cependant, elle n’est pas connue des autres. En effet, les nombres premiers et les générateurs sont publics, mais les nombres aléatoires sont privés. Il est donc impossible de retrouver la clé secrète à partir des nombres premiers et des générateurs.
+
+### Principe de Diffie-Hellman en image
+
+![Principe de Diffie-Hellman en image](./images/Diffie-Hellman.png)
 
 Maintenant que la clé secrète a été générée et connue des deux parties, ils peuvent s’échanger des messages de manière sécurisée. En effet, ils peuvent s'échanger des informations chiffrées de manière symétrique grâce à cette clé secrète connu d'eux seul et sans que personne n'ait pu l'intercepter.
 
@@ -110,36 +99,14 @@ A noter que pour s'assurer que l'on communique bien avec la bonne personne, il f
 
 ## Suivi des tram HTTP vs HTTPS
 
-liens utiles: https://www.youtube.com/watch?v=WIMKeyJ60Rw
+### HTTP
 
-détail TLS
-
-google évolution du trafic chiffré
-
-Prendre le fonctionnement https sur un site web pour expliquer concrètement
-
-passe par rsa asymétrique pour créer un canal de communication => créer une certification SSL
-puis échange en AES (symétrique) 
-détaillé les communications que la machine peut avoir avec le serveur
-
-Mettre en place une démo
-
-
-
-Comment il calcule sa key ?
-
-
-
-Serveur web tout simple HTTP puis HTTPS
-intercepté le trafic avec wireShark
-reproduire le site : https://tls12.xargs.org/#server-encryption-keys-calculation
-
-HTTP :
 Montrer que l'on envoie une requête en clair
 Montrer que l'on reçoit une réponse en clair
 
-HTTPS :
-### Montrer que l'on envoie Client Hello
+### HTTPS
+
+#### Envoie Client Hello
 
  - protocol version
     - TLS 1.2
@@ -150,7 +117,7 @@ HTTPS :
  - list of cipher suites
     - see screen
 
-### Montrer que l'on reçoit Server Hello
+#### Reçoit Server Hello
 
 - on se met d'accord sur le protocol version
     - TLS 1.2
@@ -161,25 +128,13 @@ HTTPS :
 - cipher suite chosen
     - TLS_AES_128_GCM_SHA256
 
-### Montrer que l'on reçoit le certificat
+#### Reçoit le certificat du serveur
 
     -
 
+#### Echange de clé
 
-### Server Hello
-
-
-
-### Server Certificate
-
-
-
-### Server Key Exchange
-
-
-
-
-### Server Hello Done
+#### Server Hello Done
 
 Une fois que le serveur a envoyé son certificat, il envoie un message Server Hello Done. Ce message indique au client qu'il a terminé la négociation et qu'il attend une réponse du client. Le client peut alors vérifier le certificat du serveur et envoyer son propre certificat si le serveur l'exige.
 
@@ -189,7 +144,7 @@ Handshake Protocol: Server Hello Done
     Length: 0
 ```
 
-
+#### HandShake Done
 
 ```txt
 Frame 27017: 420 bytes on wire (3360 bits), 420 bytes captured (3360 bits) on interface \Device\NPF_{C8468967-2A1E-4DC5-B5B0-06141BE76ED7}, id 0
@@ -270,6 +225,7 @@ Transport Layer Security
             Handshake Type: Server Hello Done (14)
             Length: 0
 ```
+
 ## Conclusion
 
 ## Bibliographie
@@ -277,5 +233,3 @@ Transport Layer Security
 https://tls12.xargs.org/#server-encryption-keys-calculation
 https://blog.hartleybrody.com/https-certificates/
 https://www.twaino.com/definition/h/https/
-
-

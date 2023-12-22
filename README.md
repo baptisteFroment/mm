@@ -211,5 +211,7 @@ En regardant vers l'avenir, il est essentiel de continuer à promouvoir l'utilis
 ## Bibliographie
 
 https://tls12.xargs.org/#server-encryption-keys-calculation
+
 https://blog.hartleybrody.com/https-certificates/
+
 https://www.twaino.com/definition/h/https/

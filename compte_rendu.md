@@ -2,15 +2,21 @@
 
 ## Sommaire
 
-
 1. [Introduction](#introduction)
 2. [Le protocole TLS](#le-protocole-tls)
     1. [Présentation du protocole TLS](#présentation-du-protocole-tls)
     2. [Fonctionnement du protocole TLS](#fonctionnement-du-protocole-tls)
 3. [Diffie-Hellman](#diffie-hellman)
-4. [Suivi des tram HTTP vs HTTPS](#suivi-des-tram-http-vs-https)
+    1. [Principe de Diffie-Hellman en image](#principe-de-diffie-hellman-en-image)
+4. [Suivi des trames HTTPS vs HTTP](#suivi-des-trames-https-vs-http)
+    1. [HTTPS](#https)
+        1. [Envoie Client Hello](#envoie-client-hello)
+        2. [Reçoit Server Hello](#reçoit-server-hello)
+        3. [Reçoit le certificat du serveur](#reçoit-le-certificat-du-serveur)
+        4. [Echange de clé](#echange-de-clé)
+        5. [Server Hello Done](#server-hello-done)
+    2. [HTTP](#http)
 5. [Conclusion](#conclusion)
-
 
 ## Introduction
 
@@ -97,12 +103,7 @@ Maintenant que la clé secrète a été générée et connue des deux parties, i
 
 A noter que pour s'assurer que l'on communique bien avec la bonne personne, il faut que les deux parties s'authentifient. Pour cela, elles utilisent des certificats. Ces certificats sont des fichiers qui contiennent des informations sur la personne qui communique. Ces informations sont signées par une autorité de certification. Cette autorité de certification est une entité de confiance. Elle est connue de tous et est capable de vérifier l'identité de la personne qui communique. Ainsi, si une personne communique avec une autre, elle peut vérifier l'identité de cette personne grâce à son certificat. Pour cela, elle vérifie que le certificat est signé par une autorité de certification de confiance. Si c'est le cas, elle peut vérifier l'identité de la personne qui communique. Si ce n'est pas le cas, elle ne peut pas vérifier l'identité de la personne qui communique.
 
-## Suivi des tram HTTP vs HTTPS
-
-### HTTP
-
-Montrer que l'on envoie une requête en clair
-Montrer que l'on reçoit une réponse en clair
+## Suivi des trames HTTPS vs HTTP
 
 ### HTTPS
 
@@ -130,53 +131,11 @@ Montrer que l'on reçoit une réponse en clair
 
 #### Reçoit le certificat du serveur
 
-    -
 
-#### Echange de clé
-
-#### Server Hello Done
-
-Une fois que le serveur a envoyé son certificat, il envoie un message Server Hello Done. Ce message indique au client qu'il a terminé la négociation et qu'il attend une réponse du client. Le client peut alors vérifier le certificat du serveur et envoyer son propre certificat si le serveur l'exige.
+Dans la capture Wireshark, nous observons un message "Certificate" du protocole de poignée de main TLS, essentiel pour authentifier la communication sécurisée. Ce message, de type "Certificate" et d'une longueur totale de 3936 octets, contient des certificats numériques émis par le serveur. Le premier certificat, long de 2471 octets, est crucial pour établir l'identité du serveur. Il détaille la version du certificat (v3), le numéro de série unique, et utilise l'algorithme `sha384WithRSAEncryption` pour la signature. Il inclut également des informations sur l'émetteur, le sujet du certificat, et les détails de la clé publique RSA. Les extensions fournissent des informations supplémentaires. Un second certificat, plus court mais structuré de manière similaire, est également présent.
 
 ```txt
-Handshake Protocol: Server Hello Done
-    Handshake Type: Server Hello Done (14)
-    Length: 0
-```
-
-#### HandShake Done
-
-```txt
-Frame 27017: 420 bytes on wire (3360 bits), 420 bytes captured (3360 bits) on interface \Device\NPF_{C8468967-2A1E-4DC5-B5B0-06141BE76ED7}, id 0
-Ethernet II, Src: SagemcomBroa_2f:ad:81 (40:c7:29:2f:ad:81), Dst: LiteonTechno_98:d3:c1 (74:4c:a1:98:d3:c1)
-Internet Protocol Version 4, Src: 204.79.197.222, Dst: 192.168.1.12
-Transmission Control Protocol, Src Port: 443, Dst Port: 61473, Seq: 5841, Ack: 505, Len: 366
-[5 Reassembled TCP Segments (6206 bytes): #27009(1460), #27011(1460), #27013(1460), #27015(1460), #27017(366)]
-Transport Layer Security
-    TLSv1.2 Record Layer: Handshake Protocol: Multiple Handshake Messages
-        Content Type: Handshake (22)
-        Version: TLS 1.2 (0x0303)
-        Length: 6201
-        Handshake Protocol: Server Hello
-            Handshake Type: Server Hello (2)
-            Length: 98
-            Version: TLS 1.2 (0x0303)
-            Random: 657b16078f8a4a101628657143d3e9d549c6599d9e1b98fa1f2d87a3aa668522
-                GMT Unix Time: Dec 14, 2023 15:49:43.000000000 Romance Standard Time
-                Random Bytes: 8f8a4a101628657143d3e9d549c6599d9e1b98fa1f2d87a3aa668522
-            Session ID Length: 32
-            Session ID: 802300002593fa73a3018678bed0d7fc2eb8116bae35899fde3df63f1b6cded2
-            Cipher Suite: TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384 (0xc030)
-            Compression Method: null (0)
-            Extensions Length: 26
-            Extension: status_request (len=0)
-            Extension: session_ticket (len=0)
-            Extension: application_layer_protocol_negotiation (len=5)
-            Extension: extended_master_secret (len=0)
-            Extension: renegotiation_info (len=1)
-            [JA3S Fullstring: 771,49200,5-35-16-23-65281]
-            [JA3S: a66ea560599a2f5c89eec8c3a0d69cee]
-        Handshake Protocol: Certificate
+Handshake Protocol: Certificate
             Handshake Type: Certificate (11)
             Length: 3936
             Certificates Length: 3933
@@ -204,13 +163,13 @@ Transport Layer Security
                     encrypted [truncated]: 7a6bbce1cf6236ea64bbaa4979682b1f739e5870e1e65cc967fdb74b3c582a0b4e12e28ee561403b0c69e324b6735d546f611833cafae87eb54b6482b314758bf1612db3f87f01bf8a141dd43773af79c3997b0d66b4064b7faffb0b72f670390a6635005466561349e67cd7
                 Certificate Length: 1456
                 Certificate [truncated]: 308205ac30820494a00302010202100a43a9509b01352f899579ec7208ba50300d06092a864886f70d01010c05003061310b300906035504061302555331153013060355040a130c446967694365727420496e6331193017060355040b13107777772e6469676963657274
-        Handshake Protocol: Certificate Status
-            Handshake Type: Certificate Status (22)
-            Length: 1786
-            Certificate Status Type: OCSP (1)
-            OCSP Response Length: 1782
-            OCSP Response
-        Handshake Protocol: Server Key Exchange
+```
+
+#### Echange de clé
+
+Le serveur et le client s'échangent leur clé. La courbe elliptique employée est la secp384r1, une norme répandue pour définir les paramètres de la clé publique dans de telles transactions. Le serveur, dans ce processus, transmet sa clé publique, un élément indispensable pour un échange de clés sécurisé entre les parties. Pour garantir l'authenticité et l'intégrité du message, le serveur utilise un mécanisme de signature, le RSA-PSS avec SHA-256. 
+```txt
+Handshake Protocol: Server Key Exchange
             Handshake Type: Server Key Exchange (12)
             Length: 361
             EC Diffie-Hellman Server Params
@@ -221,12 +180,33 @@ Transport Layer Security
                 Signature Algorithm: rsa_pss_rsae_sha256 (0x0804)
                 Signature Length: 256
                 Signature [truncated]: 2cd6db5b0adb49a1c77891bf0d55385c9e77a12fa2b3d87b10261209312cb45cfd4eb1f179432f10f31e1a49cbf40afe980ff7302f769c726b47ab4ebcd2183d3fcdc3ac2a900095df666bbeeff74bc1610813bc264fdc12c531fc292b83579854f786721edf45c77a8ac9a3
-        Handshake Protocol: Server Hello Done
-            Handshake Type: Server Hello Done (14)
-            Length: 0
 ```
 
+#### Server Hello Done
+
+Une fois que le serveur a envoyé son certificat, il envoie un message Server Hello Done. Ce message indique au client qu'il a terminé la négociation et qu'il attend une réponse du client. Le client peut alors vérifier le certificat du serveur et envoyer son propre certificat si le serveur l'exige.
+
+```txt
+Handshake Protocol: Server Hello Done
+    Handshake Type: Server Hello Done (14)
+    Length: 0
+```
+### HTTP
+
+Quand on consulte le site : [http://test.baptiste-froment.fr ](http://test.baptiste-froment.fr)
+![HTTP](./images/http.png)
+
+Ici on voit que l'on envoie une requête en clair et que l'on reçoit une réponse en clair.
+Les informations ici ne sont pas sensibles, mais si on avait envoyé un mot de passe, il aurait été possible de le récupérer.
 ## Conclusion
+
+La compréhension approfondie des protocoles HTTPS et TLS, ainsi que le mécanisme d'échange de clés Diffie-Hellman, révèle leur importance fondamentale dans la sécurisation des communications sur Internet. La transition de SSL à TLS marque une évolution significative dans la cybersécurité, offrant une protection renforcée contre des menaces en constante évolution.
+
+La mise en œuvre de TLS dans le protocole HTTPS garantit l'authentification, la confidentialité et l'intégrité des données, formant un bouclier contre les interceptions et les modifications non autorisées. Cette technologie est particulièrement cruciale pour les transactions en ligne et les communications d'entreprise. Les améliorations continues, notamment avec l'introduction de TLS 1.3, ont optimisé le protocole en termes de rapidité et d'efficacité, atténuant les préoccupations relatives aux performances.
+
+La distinction entre les protocoles HTTP et HTTPS, comme le montrent les analyses de trafic, souligne la vulnérabilité du premier et la robustesse du second. HTTPS, avec son processus de chiffrement et de négociation, se présente comme un rempart efficace contre les écoutes et les attaques de type "man-in-the-middle".
+
+En regardant vers l'avenir, il est essentiel de continuer à promouvoir l'utilisation du HTTPS pour tous les sites web, en particulier ceux gérant des données sensibles. La sensibilisation à l'importance de la sécurité numérique doit être renforcée auprès du grand public et des entreprises. De plus, l'évolution continue des normes de sécurité Internet, y compris des politiques plus strictes pour les autorités de certification et les algorithmes de chiffrement, est nécessaire pour maintenir et renforcer la confiance dans les transactions en ligne.
 
 ## Bibliographie
 

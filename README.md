@@ -1,5 +1,7 @@
 # Présentation du protocole HTTPS
 
+[Lien du repo](https://github.com/baptisteFroment/mm)
+
 ## Sommaire
 
 1. [Introduction](#introduction)
@@ -20,7 +22,6 @@
 
 ## Introduction
 
-
 Les entreprises et les applications web ont de bonnes raisons d'utiliser le protocole TLS, car il contribue à protéger contre les violations de données et d'autres attaques. Les sites web utilisant le HTTPS, qui est protégé par TLS, sont devenus la norme, et les navigateurs modernes avertissent les utilisateurs des sites non HTTPS, ce qui renforce la confiance des internautes.
 Le HTTPS, quant à lui, est une implémentation du chiffrement TLS en surcouche du protocole HTTP utilisé par les sites web. Ainsi, tout site web utilisant le HTTPS repose sur le chiffrement TLS pour sécuriser les données en transit.
 
@@ -32,8 +33,8 @@ La Transport Layer Security (TLS), anciennement connue sous le nom de Secure Soc
 
 Parler de "certificat SSL" de nos jours est un abus de langage. Bien que le terme "SSL" ait été largement utilisé par le passé pour désigner les certificats de sécurité numérique utilisés pour activer la couche de chiffrement dans les protocoles de sécurité sur Internet, en réalité, ces certificats sont désormais associés à TLS qui est la norme de sécurité pour les communications sur Internet depuis l’apparition de TLS 1.0 en 1999.
 
-
 La TLS (ou SSL) fonctionne en mode client-serveur et vise à assurer les objectifs de sécurité suivants :
+
 1. Authentification du serveur.
 2. Confidentialité des données échangées grâce à la création d'une session chiffrée.
 3. Intégrité des données échangées.
@@ -53,22 +54,21 @@ Ces certificats sont délivrés par des autorités de certification et contienne
 
 TLS fonctionne en utilisant un mélange de chiffrement asymétrique, comme le chiffrement RSA, pour établir un secret partagé, et de chiffrement symétrique, comme l'AES, pour chiffrer les données échangées. La sécurité est renforcée par l'utilisation de fonctions de hachage, telles que SHA-1, pour garantir l'intégrité et l'authenticité des données.
 
-
 Le TLS agit en initiants des négociations TLS, ou "handshake TLS", lorsqu'un utilisateur accède à un site web protégé par ce protocole. Au cours de cette négociation, les appareils client et serveur définissent des paramètres tels que la version de TLS, les suites de chiffrement, et ils authentifient le serveur grâce à son certificat TLS. Ensuite, ils génèrent des clés de session pour chiffrer les données de manière sécurisée.
 
 Processus du Handshake :
 
- - Client Hello
- - Server Hello
- - Certificats envoyé par le serveur
- - Echange de clés avec la méthode Diffie-Hellman
+- Client Hello
+- Server Hello
+- Certificats envoyé par le serveur
+- Echange de clés avec la méthode Diffie-Hellman
 
 Le handshake désigne le processus qui amorce une session de communication en utilisant le chiffrement TLS. Durant cette négociation, les deux parties s’échangent des messages d’authentification et de vérification. Elles établissent également les algorithmes de chiffrement qu’elles utiliseront. De plus, les deux parties se mettent d’accord sur les clés de session.
 
 La négociation intervient chaque fois qu’un utilisateur accède à un site web via HTTPS, le navigateur interroge le serveur d’origine du site web.
 Il intervient aussi sur d’autre communication comme les appels api et les requêtes DNS sur HTTPS.
 
-Au cours d’une négociation, le client et le serveur effectuent ensemble les opérations suivantes : 
+Au cours d’une négociation, le client et le serveur effectuent ensemble les opérations suivantes :
 
 Préciser la version TLS, décider de la suite de chiffrement, authentifier l’identité du serveur à l’aide de la clé publique et de la signature numérique du certificat.
 
@@ -109,32 +109,32 @@ A noter que pour s'assurer que l'on communique bien avec la bonne personne, il f
 
 #### Envoie Client Hello
 
- - protocol version
-    - TLS 1.2
- - client random data (used later in the handshake)
-    - f1d16.....
- - an optional session id to resume
-    - 00d5.....
- - list of cipher suites
-    - see screen
+- protocol version
+  - TLS 1.2
+- client random data (used later in the handshake)
+  - f1d16.....
+- an optional session id to resume
+  - 00d5.....
+- list of cipher suites
+  - see screen
 
 #### Reçoit Server Hello
 
 - on se met d'accord sur le protocol version
-    - TLS 1.2
+  - TLS 1.2
 - server random data (used later in the handshake)
-    - 4e45...
+  - 4e45...
 - session id
-    - 00d5...
+  - 00d5...
 - cipher suite chosen
-    - TLS_AES_128_GCM_SHA256
+  - TLS_AES_128_GCM_SHA256
 
 #### Reçoit le certificat du serveur
-
 
 Dans la capture Wireshark, nous observons un message "Certificate" du protocole de poignée de main TLS, essentiel pour authentifier la communication sécurisée. Ce message, de type "Certificate" et d'une longueur totale de 3936 octets, contient des certificats numériques émis par le serveur. Le premier certificat, long de 2471 octets, est crucial pour établir l'identité du serveur. Il détaille la version du certificat (v3), le numéro de série unique, et utilise l'algorithme `sha384WithRSAEncryption` pour la signature. Il inclut également des informations sur l'émetteur, le sujet du certificat, et les détails de la clé publique RSA. Les extensions fournissent des informations supplémentaires. Un second certificat, plus court mais structuré de manière similaire, est également présent.
 
 ```txt
+
 Handshake Protocol: Certificate
             Handshake Type: Certificate (11)
             Length: 3936
@@ -163,11 +163,13 @@ Handshake Protocol: Certificate
                     encrypted [truncated]: 7a6bbce1cf6236ea64bbaa4979682b1f739e5870e1e65cc967fdb74b3c582a0b4e12e28ee561403b0c69e324b6735d546f611833cafae87eb54b6482b314758bf1612db3f87f01bf8a141dd43773af79c3997b0d66b4064b7faffb0b72f670390a6635005466561349e67cd7
                 Certificate Length: 1456
                 Certificate [truncated]: 308205ac30820494a00302010202100a43a9509b01352f899579ec7208ba50300d06092a864886f70d01010c05003061310b300906035504061302555331153013060355040a130c446967694365727420496e6331193017060355040b13107777772e6469676963657274
+
 ```
 
 #### Echange de clé
 
-Le serveur et le client s'échangent leur clé. La courbe elliptique employée est la secp384r1, une norme répandue pour définir les paramètres de la clé publique dans de telles transactions. Le serveur, dans ce processus, transmet sa clé publique, un élément indispensable pour un échange de clés sécurisé entre les parties. Pour garantir l'authenticité et l'intégrité du message, le serveur utilise un mécanisme de signature, le RSA-PSS avec SHA-256. 
+Le serveur et le client s'échangent leur clé. La courbe elliptique employée est la secp384r1, une norme répandue pour définir les paramètres de la clé publique dans de telles transactions. Le serveur, dans ce processus, transmet sa clé publique, un élément indispensable pour un échange de clés sécurisé entre les parties. Pour garantir l'authenticité et l'intégrité du message, le serveur utilise un mécanisme de signature, le RSA-PSS avec SHA-256.
+
 ```txt
 Handshake Protocol: Server Key Exchange
             Handshake Type: Server Key Exchange (12)
@@ -180,6 +182,7 @@ Handshake Protocol: Server Key Exchange
                 Signature Algorithm: rsa_pss_rsae_sha256 (0x0804)
                 Signature Length: 256
                 Signature [truncated]: 2cd6db5b0adb49a1c77891bf0d55385c9e77a12fa2b3d87b10261209312cb45cfd4eb1f179432f10f31e1a49cbf40afe980ff7302f769c726b47ab4ebcd2183d3fcdc3ac2a900095df666bbeeff74bc1610813bc264fdc12c531fc292b83579854f786721edf45c77a8ac9a3
+
 ```
 
 #### Server Hello Done
@@ -191,13 +194,16 @@ Handshake Protocol: Server Hello Done
     Handshake Type: Server Hello Done (14)
     Length: 0
 ```
+
 ### HTTP
 
-Quand on consulte le site : [http://test.baptiste-froment.fr ](http://test.baptiste-froment.fr)
+Quand on consulte le site : [http://test.baptiste-froment.fr](http://test.baptiste-froment.fr)
+
 ![HTTP](./images/http.png)
 
 Ici on voit que l'on envoie une requête en clair et que l'on reçoit une réponse en clair.
 Les informations ici ne sont pas sensibles, mais si on avait envoyé un mot de passe, il aurait été possible de le récupérer.
+
 ## Conclusion
 
 La compréhension approfondie des protocoles HTTPS et TLS, ainsi que le mécanisme d'échange de clés Diffie-Hellman, révèle leur importance fondamentale dans la sécurisation des communications sur Internet. La transition de SSL à TLS marque une évolution significative dans la cybersécurité, offrant une protection renforcée contre des menaces en constante évolution.
@@ -210,8 +216,8 @@ En regardant vers l'avenir, il est essentiel de continuer à promouvoir l'utilis
 
 ## Bibliographie
 
-https://tls12.xargs.org/#server-encryption-keys-calculation
+<https://tls12.xargs.org/#server-encryption-keys-calculation>
 
-https://blog.hartleybrody.com/https-certificates/
+<https://blog.hartleybrody.com/https-certificates/>
 
-https://www.twaino.com/definition/h/https/
+<https://www.twaino.com/definition/h/https/>
